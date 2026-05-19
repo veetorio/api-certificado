@@ -6,9 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev --respawn --transpile-only server.ts",
-    "build" : "npm install && tsc",
-    "start" : "node server.js"
-    },
+    "build": "npm install && tsc",
+    "start": "node server.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -20,7 +20,7 @@
     "express": "^5.2.1",
     "googleapis": "^171.4.0",
     "sqlite": "^5.1.1",
-    "sqlite3": "^6.0.1"
+    "sqlite3": "^5.1.6"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
