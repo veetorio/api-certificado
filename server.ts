@@ -55,7 +55,7 @@ app.post(ENDPOINT, async (_, res) => {
     console.log(_.body);
     res.send(await db.insertTuple(_.body));
 })
-app.delete(ENDPOINT,middleware,async (_, res) => {
+app.delete(ENDPOINT,async (_, res) => {
     await db.delete();
     res.send("Participante removido com sucesso.");
 })
