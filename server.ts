@@ -46,6 +46,11 @@ app.get(ENDPOINT + "/nomesAbreviados", async (_, res) => {
     })
     res.send(queryResult);
 })
+app.get(ENDPOINT, async (_, res) => {
+    console.log("Requisição recebida para obter nomes abreviados.");
+    let queryResult = await db.getField(["id", "nome"]);
+    res.send(queryResult);
+})
 app.post(ENDPOINT, async (_, res) => {
     console.log(_.body);
     res.send(await db.insertTuple(_.body));
