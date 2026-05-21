@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "npm install && tsc",
-    "start": "node dist/sserver.js"
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
