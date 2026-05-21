@@ -1,8 +1,9 @@
-import Express = require("express");
-import cors = require("cors")
-import SqlLite3 = require("./DatabaseProvider");
-
-const db = new SqlLite3();
+import Express from "express";
+import cors from "cors"
+import sql from "./providers/DatabaseProvider";
+import MailJetSender  from "./providers/MailJetProvider";
+import ResendProvider from "./providers/ResendProvider";
+const db = new sql.SqlLite3();
 const app = Express();
 app.use(Express.json());
 app.use(cors())
@@ -12,6 +13,8 @@ interface Participante {
     nome: string;
     email: string;
 }
+
+const mailSender = new ResendProvider();
 
 function abreviarNome(nomeCompleto: string) {
     const palavras = nomeCompleto.trim().split(" ");
@@ -30,15 +33,6 @@ function abreviarNome(nomeCompleto: string) {
 
     return [primeiroNome, ...nomesDoMeioAbreviados, ultimoNome].join(" ");
 }
-const middleware = (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
-    const key = req.headers["key"];
-    if (key !== process.env.KEY) {
-        res.status(401).send("Unauthorized");
-        return;
-    }
-    console.log(`Requisição recebida: ${req.method} ${req.url}`);
-    next();
-}
 app.get(ENDPOINT + "/nomesAbreviados", async (_, res) => {
     console.log("Requisição recebida para obter nomes abreviados.");
     let queryResult: Participante[] = await db.getField(["nome"]);
@@ -52,6 +46,20 @@ app.get(ENDPOINT + "/nomesAbreviados", async (_, res) => {
 app.get(ENDPOINT, async (_, res) => {
     console.log("Requisição recebida para obter nomes abreviados.");
     let queryResult = await db.getField(["id", "nome"]);
+    res.send(queryResult);
+})
+app.post(ENDPOINT + "/send", async (_, res) => {
+    console.log("Requisição recebida para obter nomes abreviados.");
+    let queryResult = await db.getField(["id", "email"]);
+    for (const participante of queryResult) {
+        const mailOptions = {
+            to: participante.email,
+            from: "onboarding@resend.dev",
+            subject: "Certificado de Participação",
+            body: `Olá ${participante.nome},\n\nParabéns por participar do evento! Em breve, você receberá seu certificado de participação.\n\nAtenciosamente,\nEquipe do Evento`
+        };
+        await mailSender.sendMail(mailOptions);
+    }
     res.send(queryResult);
 })
 app.post(ENDPOINT, async (_, res) => {
