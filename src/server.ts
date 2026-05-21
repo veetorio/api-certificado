@@ -54,7 +54,7 @@ app.post(ENDPOINT + "/send", async (_, res) => {
     for (const participante of queryResult) {
         const mailOptions = {
             to: participante.email,
-            from: "ettorevitorio98@gmail.com",
+            from: "noreply@api-certificado-pm9y.onrender.com",
             subject: "Certificado de Participação",
             body: `Olá ${participante.nome},\n\nParabéns por participar do evento! Em breve, você receberá seu certificado de participação.\n\nAtenciosamente,\nEquipe do Evento`
         };
